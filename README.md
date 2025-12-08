@@ -24,52 +24,35 @@ Unlike "Black Box" models, this tool integrates **Explainable AI (SHAP)** to tel
 ### 💻 How to Run Locally
 
 **1. Clone the Repository**
-```bash
+
+Bash
 git clone [https://github.com/devanshi4/churn-prediction.git](https://github.com/devanshi4/churn-prediction.git)
 cd churn-prediction
 
-**1. Clone the Repository**
-```bash
-git clone [https://github.com/YOUR_USERNAME/churn-prediction.git](https://github.com/YOUR_USERNAME/churn-prediction.git)
-cd churn-prediction
-2. Install Dependencies
+2 Install Dependencies
 
 Bash
-
 pip install -r requirements.txt
-3. Run the App
+
+3 Run the App
 
 Bash
-
 # (Optional) Retrain the model
 python train_model.py
 
 # Launch the Dashboard
 streamlit run app.py
+
 📊 Model Performance
+
 Algorithm: XGBoost Classifier
-
 Accuracy: ~79%
-
 Key Drivers: Contract Type, Tenure, Electronic Check Payment
 
 📂 Project Structure
-Plaintext
 
 ├── train_model.py      # Script to clean data and train XGBoost
 ├── app.py              # Streamlit Dashboard application
 ├── requirements.txt    # Python dependencies
 ├── README.md           # Documentation
 └── WA_Fn...csv         # (Excluded from Repo via .gitignore)
-
-### **Step 5: Push to GitHub**
-
-1.  Go to **GitHub.com** and create a new repository named `churn-prediction`.
-2.  Run the connection commands in your terminal:
-    ```bash
-    git branch -M main
-    git remote add origin https://github.com/devanshi4/churn-prediction.git
-    git push -u origin main
-    ```
-
-
