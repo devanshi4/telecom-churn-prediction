@@ -29,14 +29,16 @@ Bash
 git clone [https://github.com/devanshi4/churn-prediction.git](https://github.com/devanshi4/churn-prediction.git)
 cd churn-prediction
 
-2 Install Dependencies
+2. Install Dependencies
 
 Bash
+
 pip install -r requirements.txt
 
-3 Run the App
+3. Run the App
 
 Bash
+
 # (Optional) Retrain the model
 python train_model.py
 
@@ -44,12 +46,14 @@ python train_model.py
 streamlit run app.py
 
 📊 Model Performance
-
 Algorithm: XGBoost Classifier
+
 Accuracy: ~79%
+
 Key Drivers: Contract Type, Tenure, Electronic Check Payment
 
 📂 Project Structure
+Plaintext
 
 ├── train_model.py      # Script to clean data and train XGBoost
 ├── app.py              # Streamlit Dashboard application
