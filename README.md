@@ -25,7 +25,7 @@ Unlike "Black Box" models, this tool integrates **Explainable AI (SHAP)** to tel
 
 **1. Clone the Repository**
 ```bash
-git clone [https://github.com/devanshi4/churn-prediction.git](https://github.com/devanshi4/churn-prediction.git)
+git clone https://github.com/devanshi4/churn-prediction.git
 cd churn-prediction
 
 2. Install Dependencies
@@ -50,8 +50,8 @@ Key Drivers: Contract Type, Tenure, Electronic Check Payment
 
 📂 Project Structure
 
+
 ├── train_model.py      # Script to clean data and train XGBoost
 ├── app.py              # Streamlit Dashboard application
 ├── requirements.txt    # Python dependencies
 ├── README.md           # Documentation
-└── WA_Fn...csv         # (Excluded from Repo via .gitignore)
