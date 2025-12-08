@@ -1,0 +1,6 @@
+venv/
+Churn_Prediction_Project/venv/
+__pycache__/
+*.csv
+*.pkl
+.DS_Store
