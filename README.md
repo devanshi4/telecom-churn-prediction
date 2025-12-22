@@ -59,4 +59,5 @@ Key Drivers: Contract Type, Tenure, Electronic Check Payment
 
 ## 🚀 Future Roadmap
 - **Deployment:** Deploying the Streamlit app to the cloud (Streamlit Community Cloud or AWS).
-- **Model Monitoring:** Adding drift detection to check if customer behavior changes over time.git pull origin main
+- **Model Monitoring:** Implementing drift detection to alert when customer data patterns change over time.
+- **Explainability:** Adding detailed "What-If" analysis allowing business users to simulate changes in customer plans.
