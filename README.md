@@ -55,3 +55,8 @@ Key Drivers: Contract Type, Tenure, Electronic Check Payment
 ├── app.py              # Streamlit Dashboard application
 ├── requirements.txt    # Python dependencies
 ├── README.md           # Documentation
+
+
+## 🚀 Future Roadmap
+- **Data Transformation Layer:** Planning to integrate **DBT (Data Build Tool)** to handle complex SQL transformations and modularize the data pipeline.
+- **Enhanced Analytics:** Will move raw SQL logic into DBT models for better testing and documentation.
