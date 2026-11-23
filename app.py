@@ -1,14 +1,11 @@
+"""Streamlit dashboard: score a customer's churn risk and explain the prediction with SHAP."""
 import streamlit as st
 import pandas as pd
-import numpy as np
 import joblib
-import xgboost as xgb
 import shap
 import matplotlib.pyplot as plt
 
-# ==========================================
-# 1. PAGE SETUP
-# ==========================================
+# Page setup
 st.set_page_config(page_title="Customer Churn Predictor", page_icon="📉", layout="wide")
 
 st.title("📉 Telecom Customer Retention Dashboard")
@@ -17,9 +14,7 @@ This tool uses **XGBoost Machine Learning** to predict if a customer is likely t
 Adjust the customer profile in the sidebar to see how the risk score changes.
 """)
 
-# ==========================================
-# 2. LOAD MODEL & HELPERS
-# ==========================================
+# Load the trained model and encoders
 @st.cache_resource
 def load_artifacts():
     model = joblib.load('churn_model.pkl')
@@ -33,19 +28,17 @@ except FileNotFoundError:
     st.error("❌ Model files not found. Did you run 'train_model.py'?")
     st.stop()
 
-# ==========================================
-# 3. SIDEBAR: CUSTOMER INPUTS
-# ==========================================
+# Sidebar: customer profile
 st.sidebar.header("📝 Customer Profile")
 
 def user_input_features():
-    # We must match the exact columns the model was trained on
+    # Same columns and category labels as the training data.
     gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
     senior = st.sidebar.selectbox("Senior Citizen", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
     partner = st.sidebar.selectbox("Has Partner", ["Yes", "No"])
     dependents = st.sidebar.selectbox("Has Dependents", ["Yes", "No"])
     tenure = st.sidebar.slider("Tenure (Months)", 0, 72, 12)
-    
+
     st.sidebar.markdown("---")
     phone = st.sidebar.selectbox("Phone Service", ["Yes", "No"])
     multiple = st.sidebar.selectbox("Multiple Lines", ["No phone service", "No", "Yes"])
@@ -56,7 +49,7 @@ def user_input_features():
     support = st.sidebar.selectbox("Tech Support", ["No", "Yes", "No internet service"])
     tv = st.sidebar.selectbox("Streaming TV", ["No", "Yes", "No internet service"])
     movies = st.sidebar.selectbox("Streaming Movies", ["No", "Yes", "No internet service"])
-    
+
     st.sidebar.markdown("---")
     contract = st.sidebar.selectbox("Contract Type", ["Month-to-month", "One year", "Two year"])
     billing = st.sidebar.selectbox("Paperless Billing", ["Yes", "No"])
@@ -64,7 +57,6 @@ def user_input_features():
     monthly = st.sidebar.slider("Monthly Charges ($)", 18.0, 120.0, 70.0)
     total = st.sidebar.number_input("Total Charges ($)", min_value=0.0, value=monthly * tenure)
 
-    # Store in DataFrame
     data = {
         'gender': gender, 'SeniorCitizen': senior, 'Partner': partner, 'Dependents': dependents,
         'tenure': tenure, 'PhoneService': phone, 'MultipleLines': multiple, 'InternetService': internet,
@@ -76,23 +68,19 @@ def user_input_features():
 
 input_df = user_input_features()
 
-# ==========================================
-# 4. PREPROCESS INPUTS
-# ==========================================
-# We need to encode the inputs just like we did during training
+# Preprocess inputs
+# Encode with the encoders saved at training time, so "Yes" maps to the same number.
 proc_df = input_df.copy()
 
 for col, le in encoders.items():
     if col in proc_df.columns:
-        # Handle unknown categories safely
+        # An unseen category falls back to 0 instead of crashing the app.
         proc_df[col] = proc_df[col].apply(lambda x: le.transform([x])[0] if x in le.classes_ else 0)
 
-# Ensure columns are in the exact same order as training
+# XGBoost expects the training column order.
 proc_df = proc_df[features]
 
-# ==========================================
-# 5. PREDICTION & DISPLAY
-# ==========================================
+# Prediction & display
 col1, col2 = st.columns([1, 1])
 
 with col1:
@@ -100,30 +88,24 @@ with col1:
     prediction = model.predict(proc_df)
     probability = model.predict_proba(proc_df)
 
-    churn_prob = probability[0][1] # Probability of "Yes"
-    
+    churn_prob = probability[0][1]
+
     if churn_prob > 0.5:
         st.error(f"⚠️ HIGH CHURN RISK: {churn_prob:.1%}")
     else:
         st.success(f"✅ LOYAL CUSTOMER: {churn_prob:.1%}")
-    
+
     st.write(f"This customer has a **{churn_prob:.1%}** chance of leaving the company.")
 
-# ==========================================
-# 6. EXPLAINABILITY (SHAP)
-# ==========================================
+# Explainability (SHAP)
 with col2:
     st.subheader("💡 Why this prediction?")
-    st.write("The chart below shows which factors pushed the risk **UP (Red)** or **DOWN (Blue)**.")
+    st.write("The chart shows which factors had the most influence on this customer's risk score.")
 
-    # Calculate SHAP values
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(proc_df)
 
-    # Visualization
-    # Matplotlib figure for the waterfall plot
     fig, ax = plt.subplots(figsize=(5, 5))
-    # Note: Depending on XGBoost version, shape might be (1, features) or (features,)
     shap.summary_plot(shap_values, proc_df, plot_type="bar", show=False, max_display=10)
     st.pyplot(fig)
 
