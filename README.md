@@ -6,6 +6,12 @@ A machine learning app that predicts which telecom customers are likely to cance
 
 > Part of my portfolio at **[devanshi4.github.io](https://devanshi4.github.io)**
 
+## Highlights
+
+- **Who is about to leave:** predicts churn for 7,000+ telecom customers with about 79% accuracy.
+- **And why:** SHAP shows the top factors behind every single prediction.
+- **What-if in one click:** change a customer's contract or bill and watch the risk update.
+
 ---
 
 ## The problem
